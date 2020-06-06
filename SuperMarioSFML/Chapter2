@@ -1,0 +1,92 @@
+
+class Game {
+public:
+    Game();
+    ~Game();
+    
+    void handleInput();
+    void update();
+    void render();
+    GameWindow* getGameWindow();
+    
+    sf::Time getElapsedTime();
+    void restartClock();
+private:
+
+    void moveMushroom();
+    
+    GameWindow mGameWindow;
+    sf::Clock mClock;
+    sf::Time mTime;
+    
+    
+    sf::Texture mMushroomTexture;
+    sf::Sprite mMushroomSprite;
+    sf::Vector2f mIncrement;
+    
+};
+
+#include "Game.h"
+
+Game::Game() : mGameWindow{"Chapter 2", sf::Vector2u{800, 600}} {
+    restartClock();
+    srand(std::time(NULL));
+    
+    mMushroomTexture.loadFromFile("pngs/mushrom.png");
+    mMushroomSprite.setTexture(mMushroomTexture);
+    mIncrement = sf::Vector2f{400.0f, 400.0f};
+    mMushroomSprite.setOrigin(mMushroomTexture.getSize().x / 2, mMushroomTexture.getSize().y / 2);
+}
+
+Game::~Game() {
+
+}
+
+void Game::update() {
+    mGameWindow.update();
+    moveMushroom();
+}
+
+void Game::moveMushroom() {
+    sf::Vector2u windowSize = mGameWindow.getGameWindowSize();
+    sf::Vector2u textureSize = mMushroomTexture.getSize();
+    
+    if((mMushroomSprite.getPosition().x + (textureSize.x / 2) > windowSize.x && mIncrement.x > 0) || 
+           (mMushroomSprite.getPosition().x - (textureSize.x / 2) < 0 && mIncrement.x < 0)) {
+        // Reverse direction on x Axis
+        mIncrement.x = -mIncrement.x;
+    }
+    if((mMushroomSprite.getPosition().y + (textureSize.y / 2) > windowSize.y && mIncrement.y > 0) || 
+           (mMushroomSprite.getPosition().y - (textureSize.y / 2) < 0 && mIncrement.y < 0)) {
+        // Reverse direction on x Axis
+        mIncrement.y = -mIncrement.y;
+    }
+    
+    float fElapsed = mTime.asSeconds();
+    
+    mMushroomSprite.setPosition(mMushroomSprite.getPosition().x + (mIncrement.x * fElapsed),  mMushroomSprite.getPosition().y + (mIncrement.y * fElapsed));
+}
+
+void Game::render() {
+    
+    mGameWindow.beginDraw();
+    mGameWindow.draw(mMushroomSprite);
+    mGameWindow.endDraw();
+    
+}
+
+void Game::handleInput() {
+    
+}
+
+GameWindow* Game::getGameWindow() {
+    return &mGameWindow;
+}
+
+sf::Time Game::getElapsedTime() {
+    return mTime;
+}
+
+void Game::restartClock() {
+    mTime = mClock.restart();
+}

@@ -5,21 +5,25 @@
  */
 
 /* 
- * File:   main.cpp
+ * File:   GameMgr.h
  * Author: D000M
  *
- * Created on June 5, 2020, 11:13 AM
+ * Created on June 5, 2020, 12:35 PM
  */
 
-#include "GameMgr/GameMgr.h"
+#ifndef GAMEMGR_H
+#define GAMEMGR_H
 
-/*
- * 
- */
-int main(int argc, char** argv) {
+#include "Game.h"
 
-    GameMgr::run();
+
+class GameMgr {
+public:
     
-    return 0;
-}
+    static void run();
+private:
+    static Game myGame;
+};
+
+#endif /* GAMEMGR_H */
 
